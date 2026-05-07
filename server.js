@@ -497,6 +497,52 @@ app.post("/api/generate-image", async (req, res) => {
   }
 });
 
+// ── Video Generation Endpoint (Cloudflare) ────
+app.post("/api/generate-video", async (req, res) => {
+  const { prompt, resolution = "720P", ratio = "16:9", duration = 5 } = req.body;
+  if (!prompt) return res.status(400).json({ error: "Prompt is required" });
+
+  const apiKey = (process.env.VIDEO_GEN_API_KEY || "").trim();
+  const accountId = (process.env.CLOUDFLARE_ACCOUNT_ID || "").trim();
+
+  if (!apiKey || !accountId || accountId === "your_account_id_here") {
+    return res.status(500).json({ error: "Cloudflare Account ID or Token not configured in .env file." });
+  }
+
+  // Cloudflare Workers AI REST API endpoint
+  const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/alibaba/hh1-t2v`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        resolution: resolution,
+        ratio: ratio,
+        duration: duration,
+        watermark: false
+      })
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      console.error('Cloudflare Video Error:', data);
+      throw new Error(data.errors?.[0]?.message || `API Error: ${response.status}`);
+    }
+
+    // Success response
+    res.json(data.result);
+  } catch (err) {
+    console.error('❌ Video gen error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── Text to Speech Endpoint ──────────────────
 app.post("/api/tts", async (req, res) => {
   const { text, voice = "aria" } = req.body;
@@ -545,6 +591,18 @@ app.post("/api/tts", async (req, res) => {
 });
 
 // ── Serve Frontend ────────────────────────────
+app.get("/chat", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "chat.html"));
+});
+
+app.get("/generate", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "generate.html"));
+});
+
+app.get("/video", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "video.html"));
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });

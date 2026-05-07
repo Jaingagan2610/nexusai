@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NexusAI | Generative Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body {
+      background-color: #0b0b0c;
+      font-family: 'Inter', sans-serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-card {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .neon-glow-primary {
+      box-shadow: 0 0 20px rgba(208, 188, 255, 0.15);
+    }
+    .gradient-button {
+      background: linear-gradient(135deg, #a078ff 0%, #0566d9 100%);
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#d0bcff",
+            "outline-variant": "#494454",
+            "secondary-fixed": "#d8e2ff",
+            "on-background": "#e4e2e4",
+            "outline": "#958ea0",
+            "on-surface-variant": "#cbc3d7",
+            "surface-tint": "#d0bcff",
+            "primary": "#d0bcff",
+            "on-primary-fixed-variant": "#5516be",
+            "surface-container-high": "#2a2a2c",
+            "secondary-container": "#0566d9",
+            "surface-container-low": "#1b1b1d",
+            "on-tertiary": "#482900",
+            "primary-fixed": "#e9ddff",
+            "on-tertiary-fixed": "#2c1700",
+            "surface-variant": "#353437",
+            "on-primary": "#3c0091",
+            "inverse-on-surface": "#303032",
+            "secondary-fixed-dim": "#adc6ff",
+            "on-error": "#690005",
+            "secondary": "#adc6ff",
+            "error": "#ffb4ab",
+            "inverse-surface": "#e4e2e4",
+            "surface-container": "#1f1f21",
+            "on-secondary-fixed-variant": "#004395",
+            "primary-container": "#a078ff",
+            "on-primary-container": "#340080",
+            "surface": "#131315",
+            "on-tertiary-container": "#3f2300",
+            "on-secondary-container": "#e6ecff",
+            "surface-dim": "#131315",
+            "on-secondary-fixed": "#001a42",
+            "tertiary": "#ffb869",
+            "inverse-primary": "#6d3bd7",
+            "surface-container-lowest": "#0e0e10",
+            "on-secondary": "#002e6a",
+            "background": "#131315",
+            "tertiary-container": "#ca801e",
+            "on-surface": "#e4e2e4",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed": "#23005c",
+            "surface-bright": "#39393b",
+            "on-tertiary-fixed-variant": "#673d00",
+            "error-container": "#93000a",
+            "tertiary-fixed": "#ffdcbb",
+            "tertiary-fixed-dim": "#ffb869",
+            "surface-container-highest": "#353437"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "lg": "2rem",
+            "xs": "0.5rem",
+            "sm": "1rem",
+            "unit": "4px",
+            "gutter": "24px",
+            "container-max": "1440px",
+            "md": "1.5rem",
+            "xl": "4rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "mono-code": ["monospace"],
+            "headline-lg": ["Inter"],
+            "display-xl": ["Inter"],
+            "body-md": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+            "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+            "headline-md": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "mono-code": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+            "display-xl": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar Implementation -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-outline-variant/10 shadow-sm transition-all ease-in-out">
+<div class="flex justify-between items-center h-16 px-md max-w-container-max mx-auto">
+<div class="flex items-center gap-xl">
+<a href="/" class="flex items-center gap-xl hover:opacity-80 transition-opacity">
+<img alt="NexusAI Logo" class="w-8 h-8 rounded-lg" src="https://lh3.googleusercontent.com/aida/ADBb0ug1bCHYXEqShHbB7MSOR2kOgmE-bUoOzqMF1rJ2-C7LQKUg3R3gVaCwgbtyxBgIfn7eiRP5x4FD-d78VOxJllb0SB9ZRdCQV0NVSrRI2AvhA4AS-oF3QefOEM5gp30k-sa2Q92zJfD3izkzbJUS2admvgxFTPK3YFXQORvHisSvHRANW6Nl7eerl9AuPhQLS9V0PXbdu1xWvmBVU303QYdFSxdz5yJnVnV-Gp6isHtGBqX6oMTLo8KVa0vWFx5IRxHnqP0baik7dA"/>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tighter">NexusAI</span>
+</a>
+<div class="hidden md:flex gap-md">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" href="/">Platform</a>
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1" href="/generate">Image Studio</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" href="/video">Video Studio</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" href="/chat">Chat</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Pricing</a>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button onclick="window.location.href='/chat'" class="px-md py-xs font-body-md text-on-surface-variant hover:text-on-surface hover:scale-105 transition-all">Sign In</button>
+<button onclick="window.location.href='/chat'" class="px-md py-xs rounded-full gradient-button text-white font-bold hover:scale-105 transition-all shadow-lg">Get Started</button>
+</div>
+</div>
+</nav>
+<!-- Main Layout -->
+<div class="pt-16 flex min-h-screen">
+<!-- Sidebar Controls -->
+<aside class="w-80 h-[calc(100vh-64px)] fixed left-0 overflow-y-auto bg-surface-container-low/90 backdrop-blur-2xl border-r border-outline-variant/10 p-md flex flex-col gap-lg scrollbar-hide">
+<div>
+<h3 class="font-label-sm text-label-sm text-outline uppercase tracking-widest mb-md">Model selection</h3>
+<div class="relative">
+<select id="model-select" class="w-full bg-surface-container-high border border-outline-variant/20 rounded-xl px-md py-sm text-on-surface focus:ring-2 focus:ring-primary outline-none appearance-none">
+<option value="flux">Nexus-2 (Latest)</option>
+<option value="flux-fast">Nexus-1.5 (Fast)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<h3 class="font-label-sm text-label-sm text-outline uppercase tracking-widest mb-md">Aspect Ratio</h3>
+<div class="grid grid-cols-3 gap-xs" id="aspect-ratio-controls">
+<button data-ratio="1:1" class="aspect-btn flex flex-col items-center gap-xs p-xs rounded-lg border border-primary bg-primary/10 text-primary">
+<div class="w-6 h-6 border-2 border-primary rounded-sm"></div>
+<span class="text-[10px] font-bold">1:1</span>
+</button>
+<button data-ratio="16:9" class="aspect-btn flex flex-col items-center gap-xs p-xs rounded-lg border border-outline-variant/20 text-on-surface-variant hover:bg-surface-variant">
+<div class="w-8 h-5 border-2 border-current rounded-sm"></div>
+<span class="text-[10px] font-bold">16:9</span>
+</button>
+<button data-ratio="9:16" class="aspect-btn flex flex-col items-center gap-xs p-xs rounded-lg border border-outline-variant/20 text-on-surface-variant hover:bg-surface-variant">
+<div class="w-5 h-8 border-2 border-current rounded-sm"></div>
+<span class="text-[10px] font-bold">9:16</span>
+</button>
+</div>
+</div>
+<div>
+<h3 class="font-label-sm text-label-sm text-outline uppercase tracking-widest mb-md">Style Presets</h3>
+<div class="grid grid-cols-2 gap-sm" id="style-presets">
+<button class="style-btn group relative overflow-hidden rounded-xl aspect-square border border-outline-variant/20" data-style="Photorealistic" data-prompt="A macro shot of a photorealistic digital eye reflecting a complex network of neon circuitry in deep purples and electric blues. The lighting is focused and cinematic with high contrast between deep shadows and bright glowing data streams. Minimalist yet intensely detailed high-end technological aesthetic.">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA03STGDx3FSmDqGDMNrdEG4zIo-BjdP8TpBHBRjl9gVGRG2p9uyYUbKwSG6YzNH8lblKeX2RlGEiWlpQcvUljYQ6AfSOAeXpRnvzELJOYQNtIDvwJkNe9JXBV5KjRhIS1AwqSRPEpWDPhzOKf3qX3kVt2-nDPhWq1xkaI-0Kf7XQJ_T2ATQqlSbbI-vOza9TjPdTktg0-tujgzwMwNftLclSZ4tzyZFzRaFbgTOShyqWDJ5g7Hzz_B5XW580NXN2_k5WJdEhs5w4g"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+<span class="absolute bottom-2 left-2 text-[10px] font-bold text-white uppercase">Photorealistic</span>
+</button>
+<button class="style-btn group relative overflow-hidden rounded-xl aspect-square border-2 border-primary" data-style="Cyberpunk" data-prompt="A sprawling cyberpunk metropolis at night with towering skyscrapers illuminated by vibrant cyan and magenta holographic advertisements. Dense rain reflects the neon lights on wet asphalt streets, creating a high-gloss, premium sci-fi atmosphere. Volumetric lighting and atmospheric fog add depth to the futuristic urban sprawl.">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcIWXHRObssS6GeMvzrTDCkieEN4Q7FPPijNrd_zw8Rhz0kakep0cx3t3FUZfk9fSy3hXdA2JqSx5LZbQVYjyVwB6q1DecrZyp8A8SLzlfoE72afKXPDfcg_KChZPwGMWHrP5Kyo3RCnLHrHiveKT-FwoZPxLI1whzDY51-aqPn2tFunaLMV0rSgoHJcx8WG05JWpHZQaWi3N46tdmAGqXBp9aR9sNFiUBsI0VbVEjNJKHvHGQ7D8jnrt2n8q6SAK1BsraignLkz8"/>
+<div class="absolute inset-0 bg-primary/20"></div>
+<span class="absolute bottom-2 left-2 text-[10px] font-bold text-white uppercase">Cyberpunk</span>
+</button>
+<button class="style-btn group relative overflow-hidden rounded-xl aspect-square border border-outline-variant/20" data-style="Minimalist" data-prompt="A serene minimalist abstract composition featuring smooth 3D fluid shapes in pearlescent whites and soft charcoal tones. The scene is lit by a soft, diffused top light creating gentle shadows and subtle highlights on the curved surfaces. A high-performance, professional design tool aesthetic with ample negative space.">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX-NeDR7VqJwQ39wpo-i4RpCG1sjkjSS9JMPsn2xFp_2E3CeSfLy4DGMvoxuyCYkbWx_Y_d6lMfGvqxYfNw1efILB3lMW-qhbQB6fa8-q-dAfF1dimR2KfEa6SVX2gCND1vmat8-bg8p0b-Bm50yuNNMYBTWv1pyrdSPQtOwKUeJJo7V8OM3rT7_UwG1e7_y79pCWwq8xCmaH-kk3mnXgxRPdVaqC4HSegd_R5Dbptbzb1BGS83TgplGD_uF0E3a12Et1yY5KukVo"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+<span class="absolute bottom-2 left-2 text-[10px] font-bold text-white uppercase">Minimalist</span>
+</button>
+<button class="style-btn group relative overflow-hidden rounded-xl aspect-square border border-outline-variant/20" data-style="3D Render" data-prompt="A detailed 3D render of a futuristic robotic terminal featuring smooth ceramic textures and integrated glass displays glowing with cyan data. The lighting is crisp and modern, emphasizing the clean lines and premium engineering of the device. The background is a soft-focus laboratory environment in dark charcoal tones.">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0CtWIWpshPDXlo3sKe8LXMNPbIJojG-QfeLKiIrkxpaU7qRn6uvOE-bPNOkXn0dXc37thx3-tTRgN01cSQBvPGKouHgRp2prhZUuqBISRFSStLa3laK3hfyuDbbCdQsSK7hDfdbl5ZWvHtBMi_C5BFGnNDqQQAbw_cbRR4cbKF0-lhzqHDAC6Tz2nwDht7UyNph0Ln94-Yfo_AmdFW_rwa0ss1UxaWps7w_oB7Dz4eVtNHwQKzFDAdmOkOfnXTztiIh90EwsGYBY"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+<span class="absolute bottom-2 left-2 text-[10px] font-bold text-white uppercase">3D Render</span>
+</button>
+</div>
+</div>
+<div class="mt-auto pt-lg">
+<div class="bg-surface-container-highest/40 rounded-2xl p-sm border border-outline-variant/10">
+<div class="flex justify-between items-center mb-xs">
+<span class="text-label-sm font-label-sm text-outline">Credits</span>
+<span class="text-label-sm font-label-sm text-primary">84 / 100</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[84%]"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-80 p-lg max-w-[1100px] mx-auto">
+<!-- Prompt Header -->
+<section class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg font-bold mb-md">Generative Studio</h1>
+<div class="glass-card rounded-[2rem] p-sm flex items-center gap-sm shadow-2xl">
+<div class="flex-1 px-md">
+<textarea id="prompt-input" class="w-full bg-transparent border-none focus:ring-0 text-body-lg font-body-lg text-on-surface placeholder:text-outline/50 resize-none h-12 py-3" placeholder="Describe your vision with exquisite detail..."></textarea>
+</div>
+<button id="enhance-btn" class="flex items-center gap-xs px-md py-sm rounded-full bg-surface-container-highest text-on-surface hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Enhance</span>
+</button>
+<button id="generate-btn" class="gradient-button px-xl py-sm rounded-full text-white font-bold text-body-md hover:scale-105 transition-transform neon-glow-primary">
+            Generate
+          </button>
+</div>
+</section>
+<!-- Generation Canvas / State -->
+<section class="mb-xl">
+<div id="generation-canvas" class="relative aspect-video rounded-[2.5rem] overflow-hidden border border-outline-variant/10 bg-surface-container-low group">
+<!-- Skeleton / Generation Placeholder -->
+<div id="loading-overlay" class="absolute inset-0 flex flex-col items-center justify-center hidden">
+<div class="relative w-24 h-24 mb-lg">
+<div class="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
+<div class="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin"></div>
+</div>
+<p class="font-headline-md text-headline-md font-bold text-primary animate-pulse">Initializing Synthesis</p>
+<p id="loading-step" class="text-on-surface-variant mt-sm">Step 1 of 4: Analyzing prompt architecture...</p>
+</div>
+
+<div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center">
+    <span class="material-symbols-outlined text-[64px] text-outline/30 mb-md">image_search</span>
+    <p class="text-on-surface-variant">Your masterpiece will appear here</p>
+</div>
+
+<div id="result-container" class="absolute inset-0 hidden">
+    <img id="result-image" src="" class="w-full h-full object-contain" alt="Generated Image"/>
+    <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+        <button onclick="downloadImage()" class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
+            <span class="material-symbols-outlined">download</span>
+        </button>
+    </div>
+</div>
+
+<!-- Loading Progress Bar (Bottom) -->
+<div id="progress-bar-container" class="absolute bottom-0 left-0 w-full h-2 bg-surface-container hidden">
+<div id="progress-bar" class="h-full bg-primary shadow-[0_0_15px_rgba(208,188,255,0.8)] w-[0%] transition-all duration-500"></div>
+</div>
+</div>
+</section>
+<!-- Asset Gallery -->
+<section>
+<div class="flex justify-between items-center mb-lg">
+<h2 class="font-headline-md text-headline-md font-semibold">Recently Generated</h2>
+<div class="flex gap-sm">
+<button class="p-xs rounded-lg text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-xs rounded-lg text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">list</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg" id="gallery-grid">
+<!-- Gallery items will be injected here -->
+</div>
+</section>
+</main>
+</div>
+<!-- Footer implementation -->
+<footer class="ml-80 w-[calc(100%-320px)] py-xl px-lg bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant/20">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-lg">
+<div class="flex flex-col gap-xs">
+<img alt="NexusAI Logo" class="w-10 h-10 rounded-xl mb-xs" src="https://lh3.googleusercontent.com/aida/ADBb0ug1bCHYXEqShHbB7MSOR2kOgmE-bUoOzqMF1rJ2-C7LQKUg3R3gVaCwgbtyxBgIfn7eiRP5x4FD-d78VOxJllb0SB9ZRdCQV0NVSrRI2AvhA4AS-oF3QefOEM5gp30k-sa2Q92zJfD3izkzbJUS2admvgxFTPK3YFXQORvHisSvHRANW6Nl7eerl9AuPhQLS9V0PXbdu1xWvmBVU303QYdFSxdz5yJnVnV-Gp6isHtGBqX6oMTLo8KVa0vWFx5IRxHnqP0baik7dA"/>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Nexus Intelligence</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 Nexus Intelligence. All rights reserved.</p>
+</div>
+<div class="flex gap-lg">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Status</a>
+</div>
+</div>
+</footer>
+
+<script>
+    const $ = id => document.getElementById(id);
+    let selectedStyle = 'Cyberpunk';
+    let selectedRatio = '1:1';
+    let isGenerating = false;
+
+    // Load gallery from local storage
+    let gallery = JSON.parse(localStorage.getItem('nexus_gallery') || '[]');
+
+    function renderGallery() {
+        const grid = $('gallery-grid');
+        if (gallery.length === 0) {
+            grid.innerHTML = '<div class="col-span-full py-20 text-center text-outline/30">No generations yet</div>';
+            return;
+        }
+        grid.innerHTML = gallery.map((item, index) => `
+            <div class="group relative aspect-square rounded-2xl overflow-hidden glass-card">
+                <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${item.url}" alt="${item.prompt}"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-md">
+                    <p class="text-white text-[10px] mb-2 truncate">${item.prompt}</p>
+                    <div class="flex gap-xs justify-center">
+                        <button onclick="downloadImage('${item.url}')" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined text-[20px]">download</span>
+                        </button>
+                        <button class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined text-[20px]">share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function downloadImage(url) {
+        const link = document.createElement('a');
+        link.href = url || $('result-image').src;
+        link.download = `nexusai-${Date.now()}.png`;
+        link.click();
+    }
+
+    // Aspect Ratio Toggle
+    document.querySelectorAll('.aspect-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.aspect-btn').forEach(b => {
+                b.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
+                b.classList.add('border-outline-variant/20', 'text-on-surface-variant');
+            });
+            btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
+            btn.classList.remove('border-outline-variant/20', 'text-on-surface-variant');
+            selectedRatio = btn.dataset.ratio;
+        });
+    });
+
+    // Style Preset Toggle
+    document.querySelectorAll('.style-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.style-btn').forEach(b => {
+                b.classList.remove('border-2', 'border-primary');
+                b.classList.add('border', 'border-outline-variant/20');
+                b.querySelector('.absolute.inset-0').classList.remove('bg-primary/20');
+                b.querySelector('.absolute.inset-0').classList.add('bg-black/40');
+            });
+            btn.classList.add('border-2', 'border-primary');
+            btn.classList.remove('border', 'border-outline-variant/20');
+            btn.querySelector('.absolute.inset-0').classList.add('bg-primary/20');
+            btn.querySelector('.absolute.inset-0').classList.remove('bg-black/40');
+            selectedStyle = btn.dataset.style;
+            
+            // Optionally auto-fill prompt
+            if (!$('prompt-input').value.trim()) {
+                $('prompt-input').value = btn.dataset.prompt;
+            }
+        });
+    });
+
+    async function handleGenerate() {
+        const prompt = $('prompt-input').value.trim();
+        if (!prompt || isGenerating) return;
+
+        isGenerating = true;
+        $('generate-btn').disabled = true;
+        $('loading-overlay').classList.remove('hidden');
+        $('empty-state').classList.add('hidden');
+        $('result-container').classList.add('hidden');
+        $('progress-bar-container').classList.remove('hidden');
+        
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 5;
+            if (progress > 95) progress = 95;
+            $('progress-bar').style.width = progress + '%';
+            
+            if (progress > 25) $('loading-step').textContent = "Step 2 of 4: Mapping neural pathways...";
+            if (progress > 50) $('loading-step').textContent = "Step 3 of 4: Refining textures and lighting nodes...";
+            if (progress > 75) $('loading-step').textContent = "Step 4 of 4: Finalizing render engine outputs...";
+        }, 500);
+
+        try {
+            // Append style and ratio to prompt for better results if not already there
+            const enhancedPrompt = `${prompt}. Style: ${selectedStyle}. Aspect ratio ${selectedRatio}. High definition, cinematic.`;
+            
+            const response = await fetch('/api/generate-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: enhancedPrompt })
+            });
+
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+
+            clearInterval(progressInterval);
+            $('progress-bar').style.width = '100%';
+            
+            const imgUrl = `data:image/png;base64,${data.image}`;
+            $('result-image').src = imgUrl;
+            
+            setTimeout(() => {
+                $('loading-overlay').classList.add('hidden');
+                $('result-container').classList.remove('hidden');
+                $('progress-bar-container').classList.add('hidden');
+                $('progress-bar').style.width = '0%';
+                
+                // Add to gallery
+                gallery.unshift({ url: imgUrl, prompt: prompt, date: new Date().toISOString() });
+                if (gallery.length > 12) gallery.pop();
+                localStorage.setItem('nexus_gallery', JSON.stringify(gallery));
+                renderGallery();
+                
+                isGenerating = false;
+                $('generate-btn').disabled = false;
+            }, 1000);
+
+        } catch (error) {
+            clearInterval(progressInterval);
+            alert("Generation failed: " + error.message);
+            $('loading-overlay').classList.add('hidden');
+            $('empty-state').classList.remove('hidden');
+            $('progress-bar-container').classList.add('hidden');
+            isGenerating = false;
+            $('generate-btn').disabled = false;
+        }
+    }
+
+    $('generate-btn').addEventListener('click', handleGenerate);
+
+    // Initial render
+    renderGallery();
+</script>
+</body></html>
