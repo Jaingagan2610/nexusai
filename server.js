@@ -41,8 +41,13 @@ const genAI = process.env.GEMINI_API_KEY
   : null;
 
 // ── OpenAI Client ─────────────────────────────
-const openai = process.env.OPENAI_API_KEY
-  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// NOTE: OpenAI API key has exhausted credits, so GPT-4o-mini
+// is routed through GitHub Models using the GITHUB_TOKEN instead.
+const openai = process.env.GITHUB_TOKEN
+  ? new OpenAI({
+      apiKey: process.env.GITHUB_TOKEN,
+      baseURL: 'https://models.github.ai/inference',
+    })
   : null;
 
 // ── Groq Client ─────────────────────────────
@@ -117,7 +122,7 @@ app.get("/api/health", (req, res) => {
       },
       groq: {
         status: groqKeySet ? "ready" : "missing_key",
-        model: "llama-3.2-3b-preview"
+        model: "meta-llama/llama-4-scout-17b-16e-instruct"
       },
       huggingface: {
         status: !!process.env.hugging_face_api_token ? "ready" : "missing_key",
@@ -125,7 +130,7 @@ app.get("/api/health", (req, res) => {
       },
       qwen: {
         status: !!process.env.QWEN_API_KEY ? "ready" : "missing_key",
-        model: "qwen/qwen2.5-coder-32b-instruct"
+        model: "qwen/qwen3-next-80b-a3b-instruct"
       },
       llama33: {
         status: !!process.env.LLAMA_API_KEY ? "ready" : "missing_key",
@@ -247,10 +252,10 @@ app.post("/api/chat/stream", async (req, res) => {
         client = openai; modelId = "gpt-4o-mini";
       } else if (provider === "groq") {
         if (!groq) throw new Error("Groq key not set.");
-        client = groq; modelId = "llama-3.2-11b-vision-preview";
+        client = groq; modelId = "meta-llama/llama-4-scout-17b-16e-instruct";
       } else if (provider === "qwen") {
         if (!nvidia) throw new Error("NVIDIA key not set.");
-        client = nvidia; modelId = "qwen/qwen2.5-coder-32b-instruct";
+        client = nvidia; modelId = "qwen/qwen3-next-80b-a3b-instruct";
       } else if (provider === "llama33") {
         if (!llama) throw new Error("Llama 3.3 key not set.");
         client = llama; modelId = "meta/llama-3.3-70b-instruct";
@@ -450,7 +455,7 @@ app.post("/api/chat", async (req, res) => {
             return { role: m.role, content: m.content };
           })
         ],
-        model: "llama-3.2-11b-vision-preview",
+        model: "meta-llama/llama-4-scout-17b-16e-instruct",
       });
       return res.json({
         content: response.choices[0]?.message?.content || "",
@@ -460,7 +465,7 @@ app.post("/api/chat", async (req, res) => {
     if (provider === "qwen") {
       if (!nvidia) throw new Error("Qwen/NVIDIA API key not configured.");
       const response = await nvidia.chat.completions.create({
-        model: "qwen/qwen2.5-coder-32b-instruct",
+        model: "qwen/qwen3-next-80b-a3b-instruct",
         messages: [
           { role: "system", content: system || "You are NexusAI, powered by Qwen." },
           ...messages.map(m => ({ role: m.role, content: m.content }))
