@@ -11,6 +11,8 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const OpenAI = require("openai");
 const Groq = require("groq-sdk");
 const path = require("path");
+const { exec } = require("child_process");
+const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -72,6 +74,14 @@ const fluxClient = process.env.FLUX_API_KEY
     })
   : null;
 
+// ── GitHub Models Client ────────────────────
+const githubClient = process.env.GITHUB_TOKEN
+  ? new OpenAI({
+      apiKey: process.env.GITHUB_TOKEN,
+      baseURL: 'https://models.github.ai/inference',
+    })
+  : null;
+
 // ── Middleware ────────────────────────────────
 app.use(
   cors({
@@ -109,6 +119,10 @@ app.get("/api/health", (req, res) => {
         status: groqKeySet ? "ready" : "missing_key",
         model: "llama-3.2-3b-preview"
       },
+      huggingface: {
+        status: !!process.env.hugging_face_api_token ? "ready" : "missing_key",
+        model: "Motif-Technologies/Motif-Video-2B"
+      },
       qwen: {
         status: !!process.env.QWEN_API_KEY ? "ready" : "missing_key",
         model: "qwen/qwen2.5-coder-32b-instruct"
@@ -116,6 +130,18 @@ app.get("/api/health", (req, res) => {
       llama33: {
         status: !!process.env.LLAMA_API_KEY ? "ready" : "missing_key",
         model: "meta/llama-3.3-70b-instruct"
+      },
+      github: {
+        status: !!process.env.GITHUB_TOKEN ? "ready" : "missing_key",
+        model: "openai/gpt-4o-mini"
+      },
+      deepseek: {
+        status: !!process.env.DeepSeek_v3 ? "ready" : "missing_key",
+        model: "deepseek/DeepSeek-V3-0324"
+      },
+      grok3: {
+        status: !!process.env.grok_3 ? "ready" : "missing_key",
+        model: "xai/grok-3"
       }
     },
     timestamp: new Date().toISOString(),
@@ -211,7 +237,7 @@ app.post("/api/chat/stream", async (req, res) => {
       console.log('✅ Gemini stream completed.');
     }
 
-    // ── OPENAI/GROQ/NVIDIA (Iterator-based) ─────
+    // ── OPENAI/GROQ/NVIDIA/GITHUB (Iterator) ──
     else {
       let client, modelId, params = {};
       console.log(`📡 Starting ${provider} stream...`);
@@ -229,6 +255,25 @@ app.post("/api/chat/stream", async (req, res) => {
         if (!llama) throw new Error("Llama 3.3 key not set.");
         client = llama; modelId = "meta/llama-3.3-70b-instruct";
         params = { temperature: 0.2, top_p: 0.7, max_tokens: 1024 };
+      } else if (provider === "github") {
+        if (!githubClient) throw new Error("GitHub Token not configured.");
+        client = githubClient; modelId = "gpt-4o-mini";
+      } else if (provider === "deepseek") {
+        const dsKey = process.env.DeepSeek_v3;
+        if (!dsKey) throw new Error("DeepSeek_v3 token not configured.");
+        client = new OpenAI({
+          apiKey: dsKey,
+          baseURL: 'https://models.github.ai/inference',
+        });
+        modelId = "deepseek/DeepSeek-V3-0324";
+      } else if (provider === "grok3") {
+        const grokKey = process.env.grok_3;
+        if (!grokKey) throw new Error("grok_3 token not configured.");
+        client = new OpenAI({
+          apiKey: grokKey,
+          baseURL: 'https://models.github.ai/inference',
+        });
+        modelId = "xai/grok-3";
       } else {
         throw new Error(`Unknown provider: ${provider}`);
       }
@@ -442,6 +487,63 @@ app.post("/api/chat", async (req, res) => {
         content: response.choices[0]?.message?.content || "",
       });
     }
+
+    if (provider === "github") {
+      if (!githubClient) throw new Error("GitHub Token not configured.");
+      const response = await githubClient.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: system || "You are NexusAI, powered by GitHub Models." },
+          ...messages.map(m => ({ role: m.role, content: m.content }))
+        ],
+      });
+      return res.json({
+        content: response.choices[0]?.message?.content || "",
+      });
+    }
+
+    if (provider === "deepseek") {
+      const dsKey = process.env.DeepSeek_v3;
+      if (!dsKey) throw new Error("DeepSeek_v3 token not configured.");
+      const dsClient = new OpenAI({
+        apiKey: dsKey,
+        baseURL: 'https://models.github.ai/inference',
+      });
+      const response = await dsClient.chat.completions.create({
+        model: "deepseek/DeepSeek-V3-0324",
+        messages: [
+          { role: "system", content: system || "You are NexusAI, powered by DeepSeek-V3." },
+          ...messages.map(m => ({ role: m.role, content: m.content }))
+        ],
+        temperature: 1.0,
+        top_p: 1.0,
+        max_tokens: 1000,
+      });
+      return res.json({
+        content: response.choices[0]?.message?.content || "",
+      });
+    }
+
+    if (provider === "grok3") {
+      const grokKey = process.env.grok_3;
+      if (!grokKey) throw new Error("grok_3 token not configured.");
+      const grokClient = new OpenAI({
+        apiKey: grokKey,
+        baseURL: 'https://models.github.ai/inference',
+      });
+      const response = await grokClient.chat.completions.create({
+        model: "xai/grok-3",
+        messages: [
+          { role: "system", content: system || "You are NexusAI, powered by Grok-3." },
+          ...messages.map(m => ({ role: m.role, content: m.content }))
+        ],
+        temperature: 1.0,
+        top_p: 1.0,
+      });
+      return res.json({
+        content: response.choices[0]?.message?.content || "",
+      });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -502,12 +604,14 @@ app.post("/api/generate-video", async (req, res) => {
   const { prompt, resolution = "720P", ratio = "16:9", duration = 5 } = req.body;
   if (!prompt) return res.status(400).json({ error: "Prompt is required" });
 
-  const apiKey = (process.env.VIDEO_GEN_API_KEY || "").trim();
+  const apiKey = (process.env.VIDEO_GEN_API_KEY || process.env.CLOUDFLARE_API_TOKEN || "").trim();
   const accountId = (process.env.CLOUDFLARE_ACCOUNT_ID || "").trim();
 
   if (!apiKey || !accountId || accountId === "your_account_id_here") {
     return res.status(500).json({ error: "Cloudflare Account ID or Token not configured in .env file." });
   }
+
+  console.log(`🎬 Video Gen request (Cloudflare): "${prompt}"`);
 
   // Cloudflare Workers AI REST API endpoint
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/alibaba/hh1-t2v`;
@@ -623,5 +727,6 @@ app.listen(PORT, () => {
   console.log(`   OpenAI:   ${openaiSet ? "✅ Ready" : "❌ Not Set"}`);
   console.log(`   Groq:     ${groqSet ? "✅ Ready" : "❌ Not Set"}`);
   console.log(`   Qwen:     ${qwenSet ? "✅ Ready" : "❌ Not Set"}`);
-  console.log(`   Flux:     ${fluxSet ? "✅ Ready" : "❌ Not Set"}\n`);
+  console.log(`   Flux:     ${fluxSet ? "✅ Ready" : "❌ Not Set"}`);
+  console.log(`   GitHub:   ${!!process.env.GITHUB_TOKEN ? "✅ Ready" : "❌ Not Set"}\n`);
 });

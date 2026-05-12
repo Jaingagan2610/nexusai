@@ -1,0 +1,11 @@
+transformers>=5.5.4
+torch
+accelerate
+ftfy
+einops
+sentencepiece
+regex
+Pillow
+imageio
+imageio-ffmpeg
+git+https://github.com/waitingcheung/diffusers.git@feat/motif-video
