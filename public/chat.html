@@ -1,287 +1,323 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>NexusAI | Neural Architecture Analysis</title>
-<link rel="icon" type="image/png" href="favicon.png"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "secondary-container": "#0566d9",
-                      "tertiary-fixed": "#ffdcbb",
-                      "surface-tint": "#d0bcff",
-                      "surface-container-highest": "#353437",
-                      "surface-container-high": "#2a2a2c",
-                      "surface-container": "#1f1f21",
-                      "outline-variant": "#494454",
-                      "secondary-fixed-dim": "#adc6ff",
-                      "primary-fixed-dim": "#d0bcff",
-                      "inverse-primary": "#6d3bd7",
-                      "error-container": "#93000a",
-                      "on-tertiary-fixed": "#2c1700",
-                      "on-primary-container": "#340080",
-                      "error": "#ffb4ab",
-                      "secondary-fixed": "#d8e2ff",
-                      "surface-container-low": "#1b1b1d",
-                      "on-tertiary-container": "#3f2300",
-                      "on-surface": "#e4e2e4",
-                      "inverse-surface": "#e4e2e4",
-                      "tertiary-fixed-dim": "#ffb869",
-                      "secondary": "#adc6ff",
-                      "background": "#131315",
-                      "on-secondary-fixed-variant": "#004395",
-                      "on-primary-fixed": "#23005c",
-                      "inverse-on-surface": "#303032",
-                      "tertiary-container": "#ca801e",
-                      "primary-fixed": "#e9ddff",
-                      "on-tertiary": "#482900",
-                      "surface": "#131315",
-                      "on-primary": "#3c0091",
-                      "on-secondary-container": "#e6ecff",
-                      "on-tertiary-fixed-variant": "#673d00",
-                      "surface-container-lowest": "#0e0e10",
-                      "surface-variant": "#353437",
-                      "on-surface-variant": "#cbc3d7",
-                      "tertiary": "#ffb869",
-                      "on-error": "#690005",
-                      "on-secondary-fixed": "#001a42",
-                      "surface-dim": "#131315",
-                      "primary-container": "#a078ff",
-                      "on-primary-fixed-variant": "#5516be",
-                      "surface-bright": "#39393b",
-                      "on-error-container": "#ffdad6",
-                      "outline": "#958ea0",
-                      "on-background": "#e4e2e4",
-                      "primary": "#d0bcff",
-                      "on-secondary": "#002e6a"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem"
-              },
-              "spacing": {
-                      "unit": "4px",
-                      "xl": "4rem",
-                      "sm": "1rem",
-                      "container-max": "1440px",
-                      "lg": "2rem",
-                      "md": "1.5rem",
-                      "gutter": "24px",
-                      "xs": "0.5rem"
-              },
-              "fontFamily": {
-                      "headline-lg": ["Inter"],
-                      "body-md": ["Inter"],
-                      "headline-md": ["Inter"],
-                      "display-xl": ["Inter"],
-                      "body-lg": ["Inter"],
-                      "mono-code": ["monospace"],
-                      "label-sm": ["Inter"]
-              },
-              "fontSize": {
-                      "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
-                      "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
-                      "headline-md": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "600"}],
-                      "display-xl": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
-                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400"}],
-                      "mono-code": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
-              }
-            },
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>NexusAI | Neural Architecture Analysis</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#0566d9",
+            "tertiary-fixed": "#ffdcbb",
+            "surface-tint": "#d0bcff",
+            "surface-container-highest": "#353437",
+            "surface-container-high": "#2a2a2c",
+            "surface-container": "#1f1f21",
+            "outline-variant": "#494454",
+            "secondary-fixed-dim": "#adc6ff",
+            "primary-fixed-dim": "#d0bcff",
+            "inverse-primary": "#6d3bd7",
+            "error-container": "#93000a",
+            "on-tertiary-fixed": "#2c1700",
+            "on-primary-container": "#340080",
+            "error": "#ffb4ab",
+            "secondary-fixed": "#d8e2ff",
+            "surface-container-low": "#1b1b1d",
+            "on-tertiary-container": "#3f2300",
+            "on-surface": "#e4e2e4",
+            "inverse-surface": "#e4e2e4",
+            "tertiary-fixed-dim": "#ffb869",
+            "secondary": "#adc6ff",
+            "background": "#131315",
+            "on-secondary-fixed-variant": "#004395",
+            "on-primary-fixed": "#23005c",
+            "inverse-on-surface": "#303032",
+            "tertiary-container": "#ca801e",
+            "primary-fixed": "#e9ddff",
+            "on-tertiary": "#482900",
+            "surface": "#131315",
+            "on-primary": "#3c0091",
+            "on-secondary-container": "#e6ecff",
+            "on-tertiary-fixed-variant": "#673d00",
+            "surface-container-lowest": "#0e0e10",
+            "surface-variant": "#353437",
+            "on-surface-variant": "#cbc3d7",
+            "tertiary": "#ffb869",
+            "on-error": "#690005",
+            "on-secondary-fixed": "#001a42",
+            "surface-dim": "#131315",
+            "primary-container": "#a078ff",
+            "on-primary-fixed-variant": "#5516be",
+            "surface-bright": "#39393b",
+            "on-error-container": "#ffdad6",
+            "outline": "#958ea0",
+            "on-background": "#e4e2e4",
+            "primary": "#d0bcff",
+            "on-secondary": "#002e6a"
           },
-        }
-    </script>
-<style>
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .neon-glow-primary:hover {
-            box-shadow: 0 0 15px rgba(208, 188, 255, 0.3);
-        }
-        .streaming-cursor {
-            display: inline-block;
-            width: 8px;
-            height: 18px;
-            background: #d0bcff;
-            margin-left: 4px;
-            vertical-align: middle;
-        }
-        /* Custom scrollbar for message thread */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "unit": "4px",
+            "xl": "4rem",
+            "sm": "1rem",
+            "container-max": "1440px",
+            "lg": "2rem",
+            "md": "1.5rem",
+            "gutter": "24px",
+            "xs": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-xl": ["Inter"],
+            "body-lg": ["Inter"],
+            "mono-code": ["monospace"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+            "headline-md": ["32px", { "lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "display-xl": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "mono-code": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .neon-glow-primary:hover {
+      box-shadow: 0 0 15px rgba(208, 188, 255, 0.3);
+    }
+
+    .streaming-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 18px;
+      background: #d0bcff;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    /* Custom scrollbar for message thread */
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 </head>
-<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
-<div class="flex h-screen w-full overflow-hidden">
-<!-- SideNavBar -->
-<aside class="hidden md:flex flex-col h-full w-64 bg-surface-container-lowest border-r border-outline-variant/10 py-md flex-shrink-0">
-<div class="px-md mb-lg">
-<div class="flex items-center gap-3">
-<img alt="NexusAI Logo" class="w-10 h-10 rounded-lg cursor-pointer" onclick="window.location.href='/'" src="logo.png"/>
-<div>
-<div class="text-headline-md font-headline-md font-bold text-primary tracking-tighter">NexusAI</div>
-<div class="text-label-sm font-label-sm text-on-surface-variant/60 uppercase tracking-widest mt-0">Enterprise Tier</div>
-</div>
-</div>
-</div>
-<div class="px-md mb-md">
-<button onclick="newChat()" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary-container text-on-primary font-body-md py-3 rounded-xl neon-glow-primary transition-all duration-300 active:scale-95">
-<span class="material-symbols-outlined text-[20px]">add</span>
-                    New Chat
-                </button>
-</div>
 
-<!-- Model Selection -->
-<div class="px-md mb-md">
-    <select id="model-select" onchange="updateProvider()" class="w-full bg-surface-container-high border border-outline-variant/20 rounded-xl px-4 py-2 text-label-sm text-on-surface outline-none cursor-pointer hover:border-primary/50 transition-colors">
-        <option value="anthropic">Claude 3.5 Sonnet</option>
-        <option value="gemini">Gemini 1.5 Flash</option>
-        <option value="openai">GPT-4o Mini</option>
-        <option value="groq">Llama 4 Scout (Groq)</option>
-        <option value="qwen">Qwen 3 Next (NVIDIA)</option>
-        <option value="llama33">Llama 3.3 (NVIDIA)</option>
-        <option value="github">GitHub_Open_AI_4.1_mini</option>
-        <option value="deepseek">DeepSeek_v3</option>
-        <option value="grok3">Grok 3</option>
-        <option value="flux">Image Studio (Quick)</option>
-        <option value="dedicated-image">Dedicated Image Studio</option>
-        <option value="dedicated-video">Dedicated Video Studio</option>
-    </select>
-</div>
+<body
+  class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+  <div class="flex h-screen w-full overflow-hidden">
+    <!-- SideNavBar -->
+    <aside
+      class="hidden md:flex flex-col h-full w-64 bg-surface-container-lowest border-r border-outline-variant/10 py-md flex-shrink-0">
+      <div class="px-md mb-lg">
+        <div class="flex items-center gap-3">
+          <img alt="NexusAI Logo" class="w-10 h-10 rounded-lg cursor-pointer" onclick="window.location.href='/'"
+            src="logo.png" />
+          <div>
+            <div class="text-headline-md font-headline-md font-bold text-primary tracking-tighter">NexusAI</div>
+            <div class="text-label-sm font-label-sm text-on-surface-variant/60 uppercase tracking-widest mt-0">
+              Enterprise Tier</div>
+          </div>
+        </div>
+      </div>
+      <div class="px-md mb-md">
+        <button onclick="newChat()"
+          class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary-container text-on-primary font-body-md py-3 rounded-xl neon-glow-primary transition-all duration-300 active:scale-95">
+          <span class="material-symbols-outlined text-[20px]">add</span>
+          New Chat
+        </button>
+      </div>
 
-<!-- Chat History Scroll Area -->
-<nav class="flex-1 overflow-y-auto space-y-4 px-md" id="sidebar-chat-list">
-    <!-- Chat sessions will be injected here -->
-</nav>
+      <!-- Model Selection -->
+      <div class="px-md mb-md">
+        <select id="model-select" onchange="updateProvider()"
+          class="w-full bg-surface-container-high border border-outline-variant/20 rounded-xl px-4 py-2 text-label-sm text-on-surface outline-none cursor-pointer hover:border-primary/50 transition-colors">
 
-<!-- Footer Section -->
-<div class="mt-auto px-md pt-md space-y-2 border-t border-outline-variant/10">
-<div class="glass-card p-4 rounded-xl mb-4 text-center">
-<div class="text-label-sm font-label-sm text-tertiary mb-2">PRO PLAN ACTIVE</div>
-<p class="text-label-sm text-on-surface-variant mb-3">Uncapped Nexus-12 access</p>
-<button class="text-label-sm font-bold text-primary hover:underline">Manage Account</button>
-</div>
-<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
-<span class="material-symbols-outlined">settings</span>
-<span>Settings</span>
-</div>
-<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
-<span class="material-symbols-outlined">logout</span>
-<span>Sign Out</span>
-</div>
-</div>
-</aside>
+          <option value="gemini">Gemini 1.5 Flash</option>
+          <option value="openai">GPT-4o Mini</option>
+          <option value="groq">Llama 4 Scout (Groq)</option>
+          <option value="qwen">Qwen 3 Next (NVIDIA)</option>
+          <option value="llama33">Llama 3.3 (NVIDIA)</option>
+          <option value="github">GitHub_Open_AI_4.1_mini</option>
+          <option value="deepseek">DeepSeek_v3</option>
+          <option value="anthropic">Claude 3.5 Sonnet</option>
+          <option value="grok3">Grok 3</option>
+          <option value="flux">Image Studio (Quick)</option>
+          <option value="dedicated-image">Dedicated Image Studio</option>
+          <option value="dedicated-video">Dedicated Video Studio</option>
+        </select>
+      </div>
 
-<!-- Main Chat Area -->
-<main class="flex-1 flex flex-col h-full relative bg-background">
-<!-- Chat Header -->
-<header class="h-16 flex items-center justify-between px-lg border-b border-outline-variant/10 bg-surface/80 backdrop-blur-xl z-10">
-<div class="flex items-center gap-3">
-<span class="md:hidden material-symbols-outlined text-on-surface-variant">menu</span>
-<h1 id="current-title" class="font-headline-md text-[18px] text-on-surface font-bold">New Chat</h1>
-</div>
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:text-primary hover:border-primary transition-all text-label-sm">
-<span class="material-symbols-outlined text-[18px]">share</span>
-                        Share
-                    </button>
-<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
-<img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSEPrjSuGDr0HafDqLrFUX-55JtFeskbF9W7iK5Gqjljcx-TZSX023tFk_bWevL3Vfd5gpmv66DxhWEsTeDsBGbs-hf8y5Gv7mwObrq8aOr0BGUK-bKhQJAQcfiZUtQeoeEh7kdVoUk9nS8DxUNrz-i7By3ND6ps69CJYzGhpT6Pk2zhQ925Jy0r7_WMy3eCTfLv6yIhDF29TWAFlQH4vHkjG4pYhKkFFQ9xwDbwB2B6w-4_if5PGyEyfX6e3A4QClpYI4r98htXM"/>
-</div>
-</div>
-</header>
+      <!-- Chat History Scroll Area -->
+      <nav class="flex-1 overflow-y-auto space-y-4 px-md" id="sidebar-chat-list">
+        <!-- Chat sessions will be injected here -->
+      </nav>
 
-<!-- Message Thread -->
-<section class="flex-1 overflow-y-auto px-lg py-xl max-w-4xl mx-auto w-full scrollbar-hide" id="chat-scroll-area">
-    <!-- Welcome View (Initially Visible) -->
-    <div id="welcome-view" class="h-full flex flex-col items-center justify-center text-center space-y-6 opacity-80 py-20">
-        <div class="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center text-primary mb-4">
+      <!-- Footer Section -->
+      <div class="mt-auto px-md pt-md space-y-2 border-t border-outline-variant/10">
+        <div class="glass-card p-4 rounded-xl mb-4 text-center">
+          <div class="text-label-sm font-label-sm text-tertiary mb-2">PRO PLAN ACTIVE</div>
+          <p class="text-label-sm text-on-surface-variant mb-3">Uncapped Nexus-12 access</p>
+          <button class="text-label-sm font-bold text-primary hover:underline">Manage Account</button>
+        </div>
+        <div
+          class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
+          <span class="material-symbols-outlined">settings</span>
+          <span>Settings</span>
+        </div>
+        <div
+          class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg cursor-pointer transition-all">
+          <span class="material-symbols-outlined">logout</span>
+          <span>Sign Out</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="flex-1 flex flex-col h-full relative bg-background">
+      <!-- Chat Header -->
+      <header
+        class="h-16 flex items-center justify-between px-lg border-b border-outline-variant/10 bg-surface/80 backdrop-blur-xl z-10">
+        <div class="flex items-center gap-3">
+          <span class="md:hidden material-symbols-outlined text-on-surface-variant">menu</span>
+          <h1 id="current-title" class="font-headline-md text-[18px] text-on-surface font-bold">New Chat</h1>
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:text-primary hover:border-primary transition-all text-label-sm">
+            <span class="material-symbols-outlined text-[18px]">share</span>
+            Share
+          </button>
+          <div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+            <img alt="User Avatar" class="w-full h-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSEPrjSuGDr0HafDqLrFUX-55JtFeskbF9W7iK5Gqjljcx-TZSX023tFk_bWevL3Vfd5gpmv66DxhWEsTeDsBGbs-hf8y5Gv7mwObrq8aOr0BGUK-bKhQJAQcfiZUtQeoeEh7kdVoUk9nS8DxUNrz-i7By3ND6ps69CJYzGhpT6Pk2zhQ925Jy0r7_WMy3eCTfLv6yIhDF29TWAFlQH4vHkjG4pYhKkFFQ9xwDbwB2B6w-4_if5PGyEyfX6e3A4QClpYI4r98htXM" />
+          </div>
+        </div>
+      </header>
+
+      <!-- Message Thread -->
+      <section class="flex-1 overflow-y-auto px-lg py-xl max-w-4xl mx-auto w-full scrollbar-hide" id="chat-scroll-area">
+        <!-- Welcome View (Initially Visible) -->
+        <div id="welcome-view"
+          class="h-full flex flex-col items-center justify-center text-center space-y-6 opacity-80 py-20">
+          <div class="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center text-primary mb-4">
             <span class="material-symbols-outlined text-[48px]" data-weight="fill">smart_toy</span>
-        </div>
-        <h2 class="text-display-xl font-display-xl tracking-tighter">How can I help you <span class="text-primary">today?</span></h2>
-        <p class="text-body-lg text-on-surface-variant max-w-md">Unlock the power of advanced intelligence with NexusAI.</p>
-        <div class="grid grid-cols-2 gap-4 max-w-2xl w-full mt-8">
-            <div onclick="setInput('Explain quantum computing like I\'m five')" class="glass-card p-6 rounded-2xl cursor-pointer hover:border-primary/40 transition-all text-left group">
-                <span class="material-symbols-outlined text-primary mb-3 group-hover:scale-110 transition-transform">lightbulb</span>
-                <p class="text-label-sm font-bold mb-1">Explain Concepts</p>
-                <p class="text-label-sm text-on-surface-variant">Quantum computing basics</p>
+          </div>
+          <h2 class="text-display-xl font-display-xl tracking-tighter">How can I help you <span
+              class="text-primary">today?</span></h2>
+          <p class="text-body-lg text-on-surface-variant max-w-md">Unlock the power of advanced intelligence with
+            NexusAI.</p>
+          <div class="grid grid-cols-2 gap-4 max-w-2xl w-full mt-8">
+            <div onclick="setInput('Explain quantum computing like I\'m five')"
+              class="glass-card p-6 rounded-2xl cursor-pointer hover:border-primary/40 transition-all text-left group">
+              <span
+                class="material-symbols-outlined text-primary mb-3 group-hover:scale-110 transition-transform">lightbulb</span>
+              <p class="text-label-sm font-bold mb-1">Explain Concepts</p>
+              <p class="text-label-sm text-on-surface-variant">Quantum computing basics</p>
             </div>
-            <div onclick="setInput('Write a Python script for a simple web scraper')" class="glass-card p-6 rounded-2xl cursor-pointer hover:border-primary/40 transition-all text-left group">
-                <span class="material-symbols-outlined text-secondary mb-3 group-hover:scale-110 transition-transform">code</span>
-                <p class="text-label-sm font-bold mb-1">Generate Code</p>
-                <p class="text-label-sm text-on-surface-variant">Python web scraper</p>
+            <div onclick="setInput('Write a Python script for a simple web scraper')"
+              class="glass-card p-6 rounded-2xl cursor-pointer hover:border-primary/40 transition-all text-left group">
+              <span
+                class="material-symbols-outlined text-secondary mb-3 group-hover:scale-110 transition-transform">code</span>
+              <p class="text-label-sm font-bold mb-1">Generate Code</p>
+              <p class="text-label-sm text-on-surface-variant">Python web scraper</p>
             </div>
+          </div>
         </div>
-    </div>
-    <div id="messages-container" class="space-y-10 hidden"></div>
-</section>
+        <div id="messages-container" class="space-y-10 hidden"></div>
+      </section>
 
-<!-- Flux Studio Gallery (Hidden by default) -->
-<div id="flux-studio" class="hidden flex-1 overflow-y-auto px-lg py-xl max-w-6xl mx-auto w-full">
-    <div class="text-center mb-12">
-        <h2 class="text-headline-lg font-headline-lg mb-2">Flux Studio</h2>
-        <p class="text-on-surface-variant">Generate high-fidelity visuals with state-of-the-art AI</p>
-    </div>
-    <div id="studio-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- AI images go here -->
-    </div>
-</div>
+      <!-- Flux Studio Gallery (Hidden by default) -->
+      <div id="flux-studio" class="hidden flex-1 overflow-y-auto px-lg py-xl max-w-6xl mx-auto w-full">
+        <div class="text-center mb-12">
+          <h2 class="text-headline-lg font-headline-lg mb-2">Flux Studio</h2>
+          <p class="text-on-surface-variant">Generate high-fidelity visuals with state-of-the-art AI</p>
+        </div>
+        <div id="studio-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- AI images go here -->
+        </div>
+      </div>
 
-<!-- Input Area -->
-<section class="p-lg pb-xl max-w-5xl mx-auto w-full">
-<div class="glass-card rounded-2xl p-2 relative shadow-2xl">
-<div class="flex items-end gap-2">
-<button onclick="document.getElementById('file-input').click()" class="p-3 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-all">
-<span class="material-symbols-outlined">attach_file</span>
-</button>
-<input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFile(this)">
-<textarea id="chat-input" class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/40 py-3 resize-none max-h-48 scrollbar-hide outline-none" placeholder="Ask NexusAI anything..." rows="1" oninput="autoResize(this)"></textarea>
-<div class="flex items-center gap-1">
-<button class="p-3 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-all">
-<span class="material-symbols-outlined">mic</span>
-</button>
-<button id="send-btn" onclick="handleSend()" class="p-3 rounded-xl bg-primary text-on-primary hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
-<span class="material-symbols-outlined">send</span>
-</button>
-</div>
-</div>
-</div>
+      <!-- Input Area -->
+      <section class="p-lg pb-xl max-w-5xl mx-auto w-full">
+        <div class="glass-card rounded-2xl p-2 relative shadow-2xl">
+          <div class="flex items-end gap-2">
+            <button onclick="document.getElementById('file-input').click()"
+              class="p-3 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-all">
+              <span class="material-symbols-outlined">attach_file</span>
+            </button>
+            <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFile(this)">
+            <textarea id="chat-input"
+              class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/40 py-3 resize-none max-h-48 scrollbar-hide outline-none"
+              placeholder="Ask NexusAI anything..." rows="1" oninput="autoResize(this)"></textarea>
+            <div class="flex items-center gap-1">
+              <button
+                class="p-3 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-all">
+                <span class="material-symbols-outlined">mic</span>
+              </button>
+              <button id="send-btn" onclick="handleSend()"
+                class="p-3 rounded-xl bg-primary text-on-primary hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined">send</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
-<div id="file-status" class="hidden mt-4 px-4">
-    <div class="inline-flex items-center gap-2 bg-secondary-container/20 text-primary px-3 py-1.5 rounded-full border border-primary/20">
-        <span class="material-symbols-outlined text-[18px]">image</span>
-        <span id="file-name" class="text-label-sm font-bold truncate max-w-[200px]">image.png</span>
-        <button onclick="removeFile()" class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
-    </div>
-</div>
+        <div id="file-status" class="hidden mt-4 px-4">
+          <div
+            class="inline-flex items-center gap-2 bg-secondary-container/20 text-primary px-3 py-1.5 rounded-full border border-primary/20">
+            <span class="material-symbols-outlined text-[18px]">image</span>
+            <span id="file-name" class="text-label-sm font-bold truncate max-w-[200px]">image.png</span>
+            <button onclick="removeFile()"
+              class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+          </div>
+        </div>
 
-<div class="mt-4 flex justify-center">
-<div class="flex items-center gap-2 bg-surface-container-high/50 px-3 py-1 rounded-full border border-outline-variant/10">
-<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Powered by Nexus-12 Advanced Intelligence</span>
-</div>
-</div>
-</section>
-</main>
-</div>
+        <div class="mt-4 flex justify-center">
+          <div
+            class="flex items-center gap-2 bg-surface-container-high/50 px-3 py-1 rounded-full border border-outline-variant/10">
+            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            <span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Powered by Nexus-12
+              Advanced Intelligence</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-<script>
+  <script>
     const $ = id => document.getElementById(id);
     let history = [];
     let sessions = [{ id: Date.now(), title: 'New Chat', history: [] }];
@@ -301,19 +337,19 @@
 
     function updateProvider() {
       provider = $('model-select').value;
-      const names = { 
-        anthropic: 'Claude', 
-        gemini: 'Gemini', 
-        openai: 'OpenAI', 
-        groq: 'Groq', 
-        qwen: 'Qwen', 
+      const names = {
+        anthropic: 'Claude',
+        gemini: 'Gemini',
+        openai: 'OpenAI',
+        groq: 'Groq',
+        qwen: 'Qwen',
         llama33: 'Llama 3.3',
         github: 'GitHub_Open_AI_4.1_mini',
         deepseek: 'DeepSeek_v3',
         grok3: 'Grok 3',
-        flux: 'Flux Studio' 
+        flux: 'Flux Studio'
       };
-      
+
       if (provider === 'dedicated-image') {
         window.location.href = '/generate';
         return;
@@ -336,7 +372,7 @@
         $('current-title').textContent = sessions.find(x => x.id === activeId)?.title || 'New Chat';
         $('chat-input').placeholder = "Ask NexusAI anything...";
       }
-      
+
       showToast(`Switched to ${names[provider]}`);
     }
 
@@ -403,16 +439,16 @@
     }
 
     function deleteSession(id) {
-        if (sessions.length <= 1) {
-            newChat();
-            return;
-        }
-        sessions = sessions.filter(s => s.id !== id);
-        if (activeId === id) {
-            activeId = sessions[0].id;
-            history = [...sessions[0].history];
-        }
-        renderAll();
+      if (sessions.length <= 1) {
+        newChat();
+        return;
+      }
+      sessions = sessions.filter(s => s.id !== id);
+      if (activeId === id) {
+        activeId = sessions[0].id;
+        history = [...sessions[0].history];
+      }
+      renderAll();
     }
 
     function switchSession(id) {
@@ -482,7 +518,7 @@
         </div>
       `;
       gallery.prepend(item);
-      
+
       if (!document.body.classList.contains('studio-mode')) {
         const container = $('messages-container');
         const wrap = document.createElement('div');
@@ -512,7 +548,7 @@
 
         const imgUrl = `data:image/png;base64,${data.image}`;
         item.querySelector('div').innerHTML = `<img src="${imgUrl}" alt="${prompt}" class="w-full h-full object-cover cursor-pointer" onclick="window.open('${imgUrl}')">`;
-        
+
         if (!document.body.classList.contains('studio-mode')) {
           const wraps = document.querySelectorAll('#messages-container > div');
           const lastWrap = wraps[wraps.length - 1];
@@ -523,7 +559,7 @@
             ${imgHtml}
           `;
         }
-        
+
         history.push({ role: 'assistant', content: `[Generated Image: ${prompt}]` });
         const s = sessions.find(x => x.id === activeId);
         if (s) s.history = [...history];
@@ -539,7 +575,7 @@
       isStreaming = true;
       let aiText = '';
       const container = $('messages-container');
-      
+
       const wrap = document.createElement('div');
       wrap.className = 'flex gap-6 items-start';
       wrap.innerHTML = `
@@ -626,9 +662,9 @@
         if (m.attachment) {
           attachHtml = `<div class="mt-4"><img src="data:${m.attachment.type};base64,${m.attachment.data}" class="max-w-md rounded-2xl border border-outline-variant/20 shadow-lg"></div>`;
         }
-        
+
         if (isAI) {
-            return `
+          return `
                 <div class="flex gap-6 items-start">
                     <div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center border border-primary/20 flex-shrink-0">
                         <span class="material-symbols-outlined text-on-primary-container" data-weight="fill">smart_toy</span>
@@ -659,7 +695,7 @@
                 </div>
             `;
         } else {
-            return `
+          return `
                 <div class="flex gap-6 items-start">
                     <div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center border border-outline-variant/20 flex-shrink-0">
                         <span class="material-symbols-outlined text-secondary">person</span>
@@ -709,12 +745,12 @@
     }
 
     function copyToClipboard(btn) {
-        const text = btn.closest('.space-y-4').querySelector('.prose').innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            btn.textContent = 'check';
-            setTimeout(() => btn.textContent = 'content_copy', 2000);
-            showToast('Copied to clipboard');
-        });
+      const text = btn.closest('.space-y-4').querySelector('.prose').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'check';
+        setTimeout(() => btn.textContent = 'content_copy', 2000);
+        showToast('Copied to clipboard');
+      });
     }
 
     async function speakText(btn, text) {
@@ -781,4 +817,5 @@
     renderAll();
   </script>
 </body>
+
 </html>
